@@ -1,0 +1,159 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+# Module 5 - Assignment 1
+## Pierce, Michaela
+### Data Wrangling
+
+```{r}
+library(tidyverse)
+library(readxl)
+
+UN_migrant <- read_excel("UN_migrant.xlsx",  
+sheet = "Table 6", col_types = c("numeric",  
+"text", "text", "numeric", "text",  
+"numeric", "numeric", "numeric",  
+"numeric", "numeric", "numeric","text", 
+"text","text","text","text","text","text", 
+"text","text","text","text"), skip = 15) 
+
+
+```
+
+
+---
+
+
+### Part 2 - Cleaning Data with dplyr
+
+
+```{r}
+# Rename columns
+UN_migrant <- UN_migrant %>%
+  rename(Country = ...2,
+         Country_Code = ...4,
+         Type = ...5,
+         `1990` = `1990...6`,
+         `1995` = `1995...7`,
+         `2000` = `2000...8`,
+         `2005` = `2005...9`,
+         `2010` = `2010...10`,
+         `2015` = `2015...11`)
+
+# Create new dataset
+Migration <- UN_migrant %>%
+  select(Country, Country_Code, Type, `1990`, `1995`, `2000`, `2005`, `2010`, `2015`)
+
+```
+
+
+---
+
+### Part 3 - Creating tidy data using tidyr
+
+```{r}
+# Create new dataset to change year to numeric
+Migration2 <- pivot_longer(Migration, cols = -c(Country, Country_Code, Type), names_to = "Year", values_to = "Cases")
+head(Migration2)
+```
+
+
+```{r}
+# change year to numeric
+Migration2$Year <- as.numeric(Migration2$Year)
+head(Migration2)
+```
+
+
+---
+
+### Part 4 - Research Questions
+```{r}
+
+# Create subsets
+RegionalMigration <- filter(Migration2, Country %in% c("Africa", "Asia", "Europe", "Oceania", "Northern America", "South America"))
+Americas <- filter(Migration2, Country %in% c("Central America", "South America", "Northern America"))
+  
+```
+
+
+---
+
+### Worldwide Migration based on Regions
+```{r}
+# Scatterplot 
+ggplot(RegionalMigration, aes(x = Year, y = Cases, color = Country)) +
+  geom_point() +
+  labs(title = "Worldwide Migration",
+       x = "Year",
+       y = "Migrants",
+       color = "Country") 
+
+
+
+# Bar Graph 
+ggplot(RegionalMigration, aes(x = Year, y = Cases, fill = Country)) +
+  geom_col() +
+  labs(title = "Worldwide Migration",
+       x = "Year",
+       y = "Migrants",
+       fill = "Region of World") +
+  scale_fill_discrete(name = "Region of World") 
+
+
+
+
+
+```
+
+
+**a. Which region in the world had the highest number of migrants in the year 2005?**  
+Asia  
+**b. Over the years, which region consistently has the most migrants every 5 year span? Which has the second most?**  
+Asia, Africa  
+**c. What region has seen the fewest migrants over the years?**  
+Oceania  
+**d. Which plot was most useful in answering these questions and why?**  
+While the scatterplot offered detailed insight into migration trends over time, the bar graph provided a concise summary of total migration counts across regions, making it equally valuable for understanding overall migration patterns. Both visualizations complemented each other well in providing a comprehensive view of the data.
+
+
+---
+
+
+###  Americas Migration by Region 
+**a. In 1990, which region had the largest number of migrants for the Americas?**  
+Central  
+**b. Has this region continued to grow since 1990?**  
+No  
+**c. What trends do you notice happening in the Americas over the years?**  
+Migration has decreased for Northern America and South America has increased between 2005 to 2010.  
+**d. Specifically, has Northern America increased or decreased over the years?**  
+Decreased  
+**e. Which plot was most useful in answering these questions and why?**  
+The scatterplot was more helpful because it makes it easier to see how migration trends change over time. With the bar graph, you have to compare the sizes of the blocks, which can be a bit trickier for understanding patterns.  
+
+```{r}
+
+# Scatterplot 
+ggplot(Americas, aes(x = Year, y = Cases, color = Country)) +
+  geom_point() +
+  labs(title = "Americas Migration",
+       x = "Year",
+       y = "Migrants",
+       color = "Country") 
+
+
+# Bar Graph
+ggplot(Americas, aes(x = Year, y = Cases, fill = Country)) +
+  geom_col() +
+  labs(title = "Americas Migration",
+       x = "Year",
+       y = "Migrants",
+       fill = "Americas Region") 
+
+
+
+```
+

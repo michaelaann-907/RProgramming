@@ -1,0 +1,6 @@
+"0","# Create a new dataset containing only North Carolina data using filter()"
+"0","NC_income <- state_income2 %>%"
+"0","  filter(State == ""North Carolina"")"
+"0",""
+"0","# Display the first 10 rows of the new dataset"
+"0","head(NC_income, 10)"

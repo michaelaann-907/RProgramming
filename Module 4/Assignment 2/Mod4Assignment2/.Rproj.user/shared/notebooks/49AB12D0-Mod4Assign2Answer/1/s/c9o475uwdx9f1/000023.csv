@@ -1,0 +1,1 @@
+"0","outliers <- boxplot(CustomerChurn2$tenure)$out "

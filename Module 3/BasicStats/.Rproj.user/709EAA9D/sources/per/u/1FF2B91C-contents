@@ -1,0 +1,103 @@
+# Load libraries
+library(tidyverse)
+
+#Part 1: Descriptive Statistics -- Run descriptive statistics on Diamonds_updated 
+#data frame (you just imported).
+# Import the dataset
+diamonds_updated <- read.csv("diamonds_updated.csv")
+
+
+# Calculate the mean price for diamonds
+mean_price <- mean(diamonds_updated$PRICE)
+
+# Round the mean price to the nearest dollar
+mean_price_rounded <- round(mean_price)
+
+# Print the rounded mean price
+print(mean_price_rounded)
+
+
+
+
+
+# Calculate the minimum price for diamonds
+min_price <- min(diamonds_updated$PRICE)
+
+# Round the minimum price to the nearest dollar
+min_price_rounded <- round(min_price)
+
+# Print the rounded minimum price
+print(min_price_rounded)
+
+# Calculate the maximum price for diamonds
+max_price <- max(diamonds_updated$PRICE)
+
+# Round the maximum price to the nearest dollar
+max_price_rounded <- round(max_price)
+
+# Print the rounded maximum price
+print(max_price_rounded)
+
+
+# Run descriptive statistics
+summary(diamonds_updated)
+
+
+#Part 2: Correlation --Run a correlation analysis on the data frame.  
+# Run correlation analysis
+selected_columns <- diamonds_updated[, c("WEIGHT", "COLOR", "CLARITY", "PRICE")]
+
+
+correlation_matrix <- cor(selected_columns)
+
+
+print(correlation_matrix)
+
+
+
+#Part 3: Regression Analysis -- Run a regression analysis on the data frame that 
+#uses price as the dependent variable with clarity, color and weight as the 
+#independent variables.  Remember, to find the value of the coefficients, you 
+#must set the linear regression formula to an object (e.g., model <- YourRegressionFormula) 
+#and then execute the summary of that object (e.g., summary(model))
+
+# Check column names
+names(diamonds_updated)
+
+
+# Check for missing values in the relevant columns
+sum(is.na(diamonds_updated$PRICE))     # Check for missing values in the "PRICE" column
+sum(is.na(diamonds_updated$CLARITY))   # Check for missing values in the "CLARITY" column
+sum(is.na(diamonds_updated$COLOR))     # Check for missing values in the "COLOR" column
+sum(is.na(diamonds_updated$WEIGHT))    # Check for missing values in the "WEIGHT" column
+
+# Run regression analysis and store the model in an object
+regression_model <- lm(diamonds_updated$PRICE ~ diamonds_updated$CLARITY + diamonds_updated$COLOR + diamonds_updated$WEIGHT)
+
+# Display summary of the regression model
+summary(regression_model)
+
+# Get the correlation matrix
+correlation_matrix <- cor(diamonds_updated[, c("PRICE", "CLARITY", "COLOR", "WEIGHT")])
+
+# Exclude diagonal elements (correlation of variables with themselves)
+correlation_matrix[upper.tri(correlation_matrix)] <- NA
+
+# Find the maximum correlation coefficient
+max_correlation <- max(correlation_matrix, na.rm = TRUE)
+
+# Get the indices of the maximum correlation coefficient
+max_indices <- which(correlation_matrix == max_correlation, arr.ind = TRUE)
+
+# Get the variable names corresponding to the indices
+variable_names <- colnames(correlation_matrix)
+
+# Print the variable names with the highest correlation coefficient
+cat("Variables with the highest correlation:", variable_names[max_indices[1]], "and", variable_names[max_indices[2]], "\n")
+cat("Correlation coefficient:", max_correlation, "\n")
+
+# Run regression analysis and store the model in an object
+regression_model <- lm(PRICE ~ CLARITY + COLOR + WEIGHT, data = diamonds_updated)
+
+# Display summary of the regression model
+summary(regression_model)

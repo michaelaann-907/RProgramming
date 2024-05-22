@@ -1,0 +1,6 @@
+"0","# Scatterplot"
+"0","ggplot(GOOG, aes(x = Date, y = Close)) +"
+"0","  geom_point() +"
+"0","  labs(title = ""Scatterplot of Close Price over Time"","
+"0","       x = ""Date"","
+"0","       y = ""Close Price"")"

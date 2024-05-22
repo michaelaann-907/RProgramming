@@ -1,0 +1,314 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+# Module 6 - Assignment 2
+
+
+## Pierce, Michaela
+
+
+### Statistical Analysis
+
+
+
+
+---
+
+```{r}
+# Load libraries
+library(readxl)
+library(readr)
+
+# Load datasets
+Respiratory <- read_excel("RespiratoryExchangeSample.xlsx")
+Advertising <- read_csv("Advertising.csv")
+insurance <- read_csv("insurance.csv")
+Perceptions <- read_excel("Perceptions.xlsx")
+
+```
+
+
+
+---
+
+
+
+# Regression and Correlation  
+
+
+Regression analysis is a statistical method that allows you to examine the relationship between two or more 
+variables of interest. Correlation analysis is a method of statistical evaluation used to study the strength of a 
+relationship between two, numerically measured, continuous variables (e.g. height and weight). This 
+particular type of analysis is useful when a researcher wants to establish if there are possible connections 
+between variables. 
+
+
+
+# Insurance Costs
+
+We would like to determine if we can accurately predict insurance costs based upon the factors included in 
+the data. We would also like to know if there are any connections between variables (for example, is age 
+connected or correlated to charges).
+
+
+
+
+# Correlations of bmi, age, children, and cost
+
+```{r}
+library(dplyr)
+library(corrplot)
+library(RColorBrewer) 
+
+# Create new dataset insurance 2 with age, bmi, children, and charges
+insurance2 <- insurance %>% 
+               select(age, bmi, children, charges)
+
+# Calculating correlation matrix
+Corr_matrix <- cor(insurance2)
+
+# Visualizing the correlation matrix
+corrplot(Corr_matrix, type="upper", order="hclust", 
+col=brewer.pal(n=8, name="RdYlBu")) 
+
+```
+
+  
+
+__Based on the matrix and visuals, explain the results from your correlation matrix in a paragraph after the chunk of code. Are any of the variables highly correlated?__  
+Age and Charges are highly correlated. BMI and Charges are next to being highly correlated and then BMI and Age.
+
+
+
+
+---
+
+
+#Regression Analysis
+
+```{r}
+# Regression Analysis
+
+# Perform multiple linear regression
+lm_model <- lm(charges ~ age + bmi + children, data = insurance2)
+
+# Display coefficients
+coefficients(lm_model)
+
+# Display summary of the regression model
+summary(lm_model)
+
+```
+
+
+__Based on the results, which variables were significant and what particular significant variable had the largest impact on charges? Provide a summary after the chunk of code.__  
+
+Based on the results, age has the largest impact on charges, with a coefficient estimate of approximately $240. This shows age plays a crucial part in predicting medical insurance charges. In addition to age, BMI and the number of children covered by health insurance are also significant predictors. 
+
+
+
+```{r}
+# Create new variable for gender
+insurance <- mutate(insurance, gender = ifelse(sex == "female", 1, 0))
+
+# Create new variable for smoker
+insurance <- mutate(insurance, smoker2 = ifelse(smoker == "yes", 1, 0))
+
+# Running regression with additional variables
+lm_results <- lm(charges ~ age + bmi + children + gender + smoker2, data = insurance)
+summary(lm_results)
+
+```
+
+
+__After the code, provide an explanation of the new 
+results. Does gender and smoking have an impact on cost?__
+
+
+Smoking has a significant impact on medical insurance charges, with smokers incurring much higher costs compared to non-smokers. Gender does not appear to have that much impact on cost.
+
+
+---
+
+# Group Comparisons with t-tests
+
+
+The t-test is used to compare the values of the means from two samples and test whether it is likely that the 
+samples are from populations having different mean values. This is often used to compare 2 groups to see if 
+there are any significant differences between these groups. 
+
+
+
+
+# Caffeine Impacts on Respiratory Exchange Ratio
+
+
+A study of the effect of caffeine on muscle metabolism used volunteers who each underwent arm exercise 
+tests. Half the participants were randomly selected to take a capsule containing pure caffeine one hour 
+before the test. The other participants received a placebo capsule. During each exercise the subject's 
+respiratory exchange ratio (RER) was measured. (RER is the ratio of CO2 produced to O2 consumed and is an 
+indicator of whether energy is being obtained from carbohydrates or fats). 
+
+
+
+```{r}
+library(dplyr)
+
+# Summary statistics
+summary(Respiratory)
+
+# Separate data into caffeine and placebo groups
+caffeine_group <- Respiratory$Caffeine
+placebo_group <- Respiratory$Placebo
+
+# Perform Welch t-test
+t_test_result <- t.test(caffeine_group, placebo_group)
+t_test_result
+
+
+```
+
+
+
+
+__Does caffeine affect RER during exercise?__
+
+The Welch t-test showed a highly significant difference (p-value < 2.2e-16) in mean respiratory exchange ratio (RER) between the caffeine and placebo groups. Participants who consumed caffeine had an average RER of 110.85, while those on placebo averaged 90.11. This suggests caffeine intake affects RER during exercise, indicating potential impacts on muscle metabolism.
+
+
+
+
+
+---
+
+
+
+# Impact if Advertising
+
+You are a marketing researcher conducting a study to understand the impact of a new marketing campaign. 
+To test the new advertisements, you conduct a study to understand how consumers will respond based on 
+see the new ad compared to the previous campaign. One group will see the new ad and one group will see 
+the older ads. They will then rate the ad on a scale of 0 to 100 as a percentage of purchase likelihood based 
+on the ad. 
+The question you are trying to answer is whether to roll out the new campaign or stick with the current 
+campaign. 
+
+
+
+```{r}
+colnames(Advertising)
+
+# Summary statistics
+summary(Advertising)
+
+# Separate data into new ad and old ad groups
+new_ad_group <- Advertising$Rating[Advertising$Group == 1]
+old_ad_group <- Advertising$Rating[Advertising$Group == 2]
+
+# Perform Student's t-test
+t_test_result <- t.test(new_ad_group, old_ad_group, var.equal = TRUE)
+print(t_test_result)
+
+
+
+```
+
+
+__Should they roll out the new campaign or stick with the current campaign?__
+
+The p-value of 0.2113 is greater than the typical significance level of 0.05, indicating no significant difference in purchase likelihood between the new and old ad groups. As a result, it's unclear whether the new campaign effectively increases purchase likelihood compared to the old one. Further analysis is needed for a definitive conclusion.
+
+
+
+
+
+---
+
+
+
+# AVOVA
+
+An ANOVA test is a way to find out if survey or experiment results are significant. In other words, they help 
+you to figure out if you need to reject the null hypothesis or accept the alternate hypothesis. Basically, you’re 
+testing groups to see if there’s a difference between them. Examples of when you might want to test 
+different groups:
+
+
+- A group of psychiatric patients are trying three different therapies: counseling, medication and 
+biofeedback. You want to see if one therapy is better than the others.  
+- A manufacturer has two different processes to make light bulbs. They want to know if one process is 
+better than the other. 
+- Students from different colleges take the same exam. You want to see if one college outperforms the 
+other.
+
+
+
+
+
+
+
+# Perceptions of Social Media Profiles 
+
+This study examines how certain information presented on a social media site might influence perceptions of trust, connectedness and knowledge of the profile owner. Specifically, participants were shown weak, 
+average and strong arguments that would influence their perceptions of the above variables. Using the 
+dataset provided, the following code runs an ANOVA with post-hoc analyses to understand argument 
+strength impacts on perceptions.
+
+
+
+
+
+```{r}
+
+# ANOVA 1: Trust across Argument
+anova_trust <- aov(Trust ~ Argument, data = Perceptions)
+summary(anova_trust)
+
+
+# ANOVA 2: Connectedness across Argument
+anova_connectedness <- aov(Connectedness ~ Argument, data = Perceptions)
+summary(anova_connectedness)
+
+
+# ANOVA 3: Knowledge across Argument
+anova_knowledge <- aov(Knowledge ~ Argument, data = Perceptions)
+summary(anova_knowledge)
+
+
+
+```
+
+
+
+
+Two ANOVAs are significant: ANOVA 1 (Trust across Argument) and ANOVA 2 (Connectedness across Argument) with p-values of 2.4e-07 and 7.85e-05, respectively. These indicate notable differences in Trust and Connectedness perceptions among Argument levels. ANOVA 3 (Knowledge across Argument) is not significant (p = 0.73), suggesting insignificant differences in Knowledge perception across Argument levels.
+
+
+
+
+
+
+
+```{r}
+
+#Using the two significant ANOVAS (1 & 2)
+
+tukey_trust <- TukeyHSD(anova_trust)
+tukey_connectedness <- TukeyHSD(anova_connectedness)
+
+print(tukey_trust)
+print(tukey_connectedness)
+```
+
+
+The post-hoc analysis shows significant differences in Trust perception between weak-average and weak-strong arguments, as well as between weak-average and strong-average arguments. However, there is no significant difference in Trust perception between strong and average arguments (p adj = 0.97).
+
+Regarding Connectedness, significant differences exist among weak-average, weak-strong, and strong-average arguments, while the difference between strong and average arguments is not significant (p adj = 0.36).
+
+
+
+
+

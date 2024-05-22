@@ -1,0 +1,8 @@
+"0","library(ggplot2)"
+"0","# Create scatterplot using diamonds dataset"
+"0","ggplot(diamonds, aes(x = carat, y = price)) +"
+"0","  geom_point() +"
+"0","  labs(title = ""Scatterplot of Carat vs Price in Diamonds"","
+"0","       x = ""Carat"","
+"0","       y = ""Price"")"
+"0",""

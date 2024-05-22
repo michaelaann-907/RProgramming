@@ -1,0 +1,5 @@
+"0",""
+"0","# Create a random sample of 100 rows from the diamonds dataset"
+"0","dsample <- diamonds[sample(nrow(diamonds), 100), ]"
+"0",""
+"0",""

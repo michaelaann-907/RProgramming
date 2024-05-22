@@ -1,0 +1,8 @@
+"0","# Create scatterplot with color using dsample dataset"
+"0","ggplot(dsample, aes(x = carat, y = price, color = color)) +"
+"0","  geom_point() +"
+"0","  geom_smooth() +"
+"0","  labs(title = ""Scatterplot of Carat and Price with Color in Diamonds (Sample)"","
+"0","       x = ""Carat"","
+"0","       y = ""Price"")"
+"0",""

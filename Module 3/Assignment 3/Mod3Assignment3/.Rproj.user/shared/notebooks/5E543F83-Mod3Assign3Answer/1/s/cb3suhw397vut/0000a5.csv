@@ -1,0 +1,6 @@
+"0",""
+"0",""
+"0",""
+"0","# Plots Date and Open variables"
+"0","ggplot(GOOG, aes(x=Date, y=Open)) +"
+"0","  geom_area(color=""black"", fill=""green"", alpha=.10)"

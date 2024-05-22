@@ -1,0 +1,5 @@
+"0","# Scatterplot for AvgStateIncome dataset"
+"0","ggplot(data = AvgStateIncome_N, aes(x = State_ab, y = AvgIncome)) +"
+"0","  geom_point() +"
+"0","  labs(x = ""State"", y = ""Average Income"", title = ""Average Income by State"")"
+"0",""

@@ -1,0 +1,2 @@
+"0","Migration2 <- pivot_longer(Migration, cols = -c(Country, Country_Code, Type), names_to = ""Year"", values_to = ""Cases"")"
+"0","head(Migration2)"

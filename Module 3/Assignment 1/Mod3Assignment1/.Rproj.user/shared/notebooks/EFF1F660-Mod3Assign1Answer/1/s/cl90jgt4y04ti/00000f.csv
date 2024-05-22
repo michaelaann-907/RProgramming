@@ -1,0 +1,7 @@
+"0","# Create line chart with fitted line"
+"0","ggplot(candy_production, aes(x = observation_date, y = IPG3113N)) +"
+"0","  geom_line() +"
+"0","  geom_smooth() +"
+"0","  labs(title = ""Monthly Candy Production"","
+"0","       x = ""Year"","
+"0","       y = ""As percent of 2012 production"")"

@@ -1,0 +1,7 @@
+"0",""
+"0","ggplot(NCHomeSales_grouped, aes(x = Metro, y = ZHVI)) +"
+"0","  geom_violin(width = 0.7) +  # Adjust the width of the violin plot"
+"0","  geom_boxplot(width = 0.2) +  # Adjust the width of the box plot"
+"0","  scale_y_continuous(breaks = c(0, 1000000, 2000000), labels = c(""0"", ""1M"", ""2M"")) +"
+"0","  labs(x = ""Metro"", y = ""Home Values (in $)"") +"
+"0","  theme(axis.text.x = element_text(angle = 0)) "

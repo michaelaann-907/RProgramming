@@ -1,0 +1,8 @@
+"0",""
+"0",""
+"0",""
+"0","# d. Histogram (use the variable Close for the x-axis, nothing will be needed for the y-axis) "
+"0",""
+"0","ggplot(siri, aes(x = Close)) +"
+"0","  geom_histogram(binwidth = 1, fill = ""green"", color = ""black"") +"
+"0","  labs(title = ""Histogram of Close Prices"", x = ""Close"", y = ""Frequency"")"

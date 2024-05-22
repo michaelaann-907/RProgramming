@@ -1,0 +1,8 @@
+"0","# Correlations of bmi, age, children and cost"
+"0","## For this part, you will be using the Insurance.csv dataset you imported."
+"0",""
+"0","# Create Insurance2 dataset with selected variables"
+"0","Insurance2 <- select(insurance, age, bmi, children, charges)"
+"2","Error in select(insurance, age, bmi, children, charges) : 
+  could not find function ""select""
+"

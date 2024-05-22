@@ -1,0 +1,5 @@
+"0",""
+"0","# Create subsets"
+"0","RegionalMigration <- filter(Migration2, Country %in% c(""Africa"", ""Asia"", ""Europe"", ""Oceania"", ""Northern America"", ""South America""))"
+"0","Americas <- filter(Migration2, Country %in% c(""Central America"", ""South America"", ""Northern America""))"
+"0","  "

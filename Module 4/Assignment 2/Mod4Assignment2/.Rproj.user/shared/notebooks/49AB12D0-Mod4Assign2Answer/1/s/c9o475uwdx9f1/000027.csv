@@ -1,0 +1,4 @@
+"0",""
+"0",""
+"0","CustomerChurn3 <- CustomerChurn2[-which(CustomerChurn2$tenure %in% outliers),] "
+"0","boxplot(CustomerChurn3$tenure)"

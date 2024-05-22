@@ -1,0 +1,4 @@
+"0",""
+"0","# Create bar chart for chocolate variable"
+"0","ggplot(candy_data, aes(x = chocolate)) +"
+"0","  geom_bar() "

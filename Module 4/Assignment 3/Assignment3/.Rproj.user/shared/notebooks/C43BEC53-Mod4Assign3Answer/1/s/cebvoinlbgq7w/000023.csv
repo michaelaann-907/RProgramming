@@ -1,0 +1,5 @@
+"0","# a. Scatterplot "
+"0",""
+"0","ggplot(siri, aes(x = Date, y = Open)) +"
+"0","  geom_point() +"
+"0","  labs(title = ""Scatterplot of Open Prices"", x = ""Date"", y = ""Open"")"

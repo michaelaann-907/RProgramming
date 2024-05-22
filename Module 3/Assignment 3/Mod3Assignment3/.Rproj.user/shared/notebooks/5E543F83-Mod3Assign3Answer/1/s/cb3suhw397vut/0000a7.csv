@@ -1,0 +1,8 @@
+"0",""
+"0",""
+"0","#NewDataFile <- subset(ExistingData, Argument)"
+"0","MayPrice <- subset(GOOG, Date > ""2020-04-30"" & Date < ""2020-06-01"")"
+"0",""
+"0","ggplot(MayPrice, aes(x=Date, y=Close)) +"
+"0","  geom_point() +"
+"0","  geom_text(aes(label = round(Close)), size = 3, vjust=-1)"

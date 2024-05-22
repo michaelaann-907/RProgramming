@@ -1,0 +1,7 @@
+"0","# Scatterplot "
+"0","ggplot(RegionalMigration, aes(x = Year, y = Cases, color = Country)) +"
+"0","  geom_point() +"
+"0","  labs(title = ""Worldwide Migration"","
+"0","       x = ""Year"","
+"0","       y = ""Migrants"","
+"0","       color = ""Country"") "

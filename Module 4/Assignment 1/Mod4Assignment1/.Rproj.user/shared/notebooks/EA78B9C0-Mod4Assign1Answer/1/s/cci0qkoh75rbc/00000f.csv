@@ -1,0 +1,5 @@
+"0","# Arrange the NC_income dataset by County in ascending order using arrange()"
+"0","NC_income <- arrange(NC_income, County)"
+"0",""
+"0","# Display the first 10 rows of the arranged dataset"
+"0","head(NC_income, 10)"

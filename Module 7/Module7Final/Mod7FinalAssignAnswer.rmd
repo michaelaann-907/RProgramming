@@ -1,0 +1,420 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+# MIS503 - Final Project
+## Pierce, Michaela
+### Zillow Home Value Index Analysis
+
+
+```{r}
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+
+
+
+### Wake County Home Sales
+
+**a. What have been the overall trends in Wake County Home Values?**
+The home values have increased over the years. 
+
+**b. There were dips in home values in the past 10 years. What years did these occur?**  
+2013 - 2021
+
+
+
+**c. Based on the analysis, where would be the least expensive area to purchase home? Most expensive area?**  
+Least Expensive: Zebulon ; Most expensive: Cary
+
+
+**d. What has happened to the overall property values in Apex and Cary in 2023?**  
+Apex and Cary's overall property values did not increase in 2023. 
+
+
+```{r}
+# load data
+Sales <- read_csv("SingleFamilyResidenceSales.csv")
+
+# Create the WakeCountySales tibble
+WakeCountySales <- Sales %>%
+  filter(State == "NC" & CountyName == "Wake County") %>%
+  select(RegionName, State, CountyName, Metro,
+         `5/31/2013` = `5/31/2013`,
+         `5/31/2014` = `5/31/2014`,
+         `5/31/2015` = `5/31/2015`,
+         `5/31/2016` = `5/31/2016`,
+         `5/31/2017` = `5/31/2017`,
+         `5/31/2018` = `5/31/2018`,
+         `5/31/2019` = `5/31/2019`,
+         `5/31/2020` = `5/31/2020`,
+         `5/31/2021` = `5/31/2021`,
+         `5/31/2022` = `5/31/2022`,
+         `5/31/2023` = `5/31/2023`)
+
+# Rename date columns to only include year
+colnames(WakeCountySales)[5:16] <- gsub("5/31/", "", colnames(WakeCountySales)[5:16])
+
+# View the tibble
+# View(WakeCountySales)
+
+```
+
+```{r}
+
+
+# Tidy the data
+TidyWakeCountySales <- WakeCountySales %>%
+  pivot_longer(cols = matches("^\\d{4}$"), 
+               names_to = "YR",             
+               values_to = "ZHVI")         
+
+# View the data
+# View(TidyWakeCountySales)
+
+
+
+```
+
+
+```{r}
+# Convert YR to numeric
+TidyWakeCountySales$YR <- as.numeric(as.character(TidyWakeCountySales$YR))
+
+# Create scatter plot
+scatter_plot <- ggplot(TidyWakeCountySales, aes(x = YR, y = ZHVI, color = RegionName)) +
+  geom_point() +
+  scale_x_continuous(name = "Year", breaks = unique(TidyWakeCountySales$YR)) +  # Show every year
+  scale_y_continuous(name = "Home Values (in $)", labels = scales::comma) +  # Add commas to y-axis labels
+  labs(title = "Wake County Home Sales",
+       x = "Year",
+       y = "Home Value (ZHVI)") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))  
+
+# Display the scatter plot
+print(scatter_plot)
+
+
+```
+
+
+
+
+
+
+
+
+```{r}
+
+# Create stacked bar graph
+stacked_bar <- ggplot(TidyWakeCountySales, aes(x = factor(YR), y = ZHVI, color = RegionName)) +
+  geom_col() +
+  scale_x_discrete(name = "Year", labels = as.character(unique(TidyWakeCountySales$YR))) +  # show all years on x-axis
+  scale_y_continuous(name = "Home Values (in $)", labels = scales::comma) +  # Add commas to y-axis labels
+  labs(title = "Wake County Home Sales",
+       y = "Total Home Value (ZHVI)") +  # Corrected the y-axis label
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+ 
+
+# Display stacked bar graph
+print(stacked_bar)
+
+```
+
+
+
+---
+
+
+### NC Rental Market 
+
+**a. What has been the overall trend in the rental market around the state? Are there any cities that have not followed this trend?**  
+The rental market has increased over the years. Fayetteville remained consistent until 2021 where it spiked up. 
+
+**b. Where is the most expensive city to rent in? Least expensive?**   
+Most Expensive: Asheville ; Least Expensive: Fayetteville
+
+
+**c. You are trying to decide between Wilmington and Asheville. Which market has the lowest rent?**  
+Wilmington has the lowest rent.
+
+
+```{r}
+# load data
+Rentals <- read_csv("SingleFamilyResidenceRental.csv")
+
+# Asheville, Charlotte, Durham, Fayetteville, Raleigh, and Wilmington
+NC_RentalCities <- c("Asheville", "Charlotte", "Durham", "Fayetteville", "Raleigh", "Wilmington")
+
+
+# Filter data
+Rentals <- Rentals %>%
+  filter(RegionName %in% NC_RentalCities,
+         State == "NC") %>%
+  select(RegionName, State, matches("^1/31/20\\d{2}$"))
+
+# Rename date columns to only include the year
+colnames(Rentals)[3:10] <- gsub("1/31/", "", colnames(Rentals)[3:10])
+
+# View the tibble
+# View(Rentals)
+
+
+```
+```{r}
+
+# Tidy the data
+Tidy_Rentals <- Rentals %>%
+  pivot_longer(cols = matches("^20\\d{2}$"),
+               names_to = "YR",
+               values_to = "ZHVI")
+
+# View the tibble
+# View(Tidy_Rentals)
+```
+
+```{r}
+
+# Create scatter plot
+scatter_plot <- ggplot(Tidy_Rentals, aes(x = as.numeric(YR), y = ZHVI, color = RegionName)) +
+  geom_point() +
+  scale_x_continuous(name = "Year", breaks = unique(as.numeric(Tidy_Rentals$YR))) +  
+  scale_y_continuous(name = "Home Value (ZHVI)", labels = scales::comma) +
+  labs(title = "Home Values by Year and City",
+       x = "Year",
+       y = "Average Rentals Cost") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))  
+
+# Display the scatter plot
+print(scatter_plot)
+
+```
+
+
+```{r}
+# Create stacked bar graph
+stacked_bar <- ggplot(Tidy_Rentals, aes(x = as.numeric(YR), y = ZHVI, color = RegionName)) +
+  geom_col() +
+  scale_x_continuous(name = "Year", breaks = unique(as.numeric(Tidy_Rentals$YR))) +  
+  scale_y_continuous(name = "Average Rental Cost", labels = scales::comma) +
+  labs(title = "Rental Costs in NC Cities",
+       x = "Year",
+       y = "Average Rental Cost") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) 
+
+# Display the stacked bar graph
+print(stacked_bar)
+
+```
+
+
+
+
+
+
+---
+
+
+
+### Home Values in Select Markets
+
+**a. According to the results, which market has the lowest median price (represented as horizontal bar in box plot)?**   
+Charlotte-Concord-Gastonia
+
+
+
+**b. The violin plot will show density meaning the wider the plot is, the more observations occur within that area. Which market has the most density around the median value of homes?**   
+Wilmington
+
+
+
+**c. The box plot will also show outliers in the various markets. Which metro area had the largest outlier (i.e., the highest value home sold in the past 10 years)?**   
+Raleigh-Cary and Asheville
+
+
+```{r}
+#  Asheville, Charlotte-Concord-Gastonia, Raleigh-Cary and Wilmington
+NCHomeSales_Cities <- c("Asheville", "Charlotte-Concord-Gastonia", "Raleigh-Cary", "Wilmington")
+
+# Create the NCHomeSales tibble
+NCHomeSales <- Sales %>%
+  filter(State == "NC" & Metro %in% NCHomeSales_Cities) %>%
+  select(RegionName, State, Metro,
+         `5/31/2013` = `5/31/2013`,
+         `5/31/2014` = `5/31/2014`,
+         `5/31/2015` = `5/31/2015`,
+         `5/31/2016` = `5/31/2016`,
+         `5/31/2017` = `5/31/2017`,
+         `5/31/2018` = `5/31/2018`,
+         `5/31/2019` = `5/31/2019`,
+         `5/31/2020` = `5/31/2020`,
+         `5/31/2021` = `5/31/2021`,
+         `5/31/2022` = `5/31/2022`,
+         `5/31/2023` = `5/31/2023`)
+
+# Rename date columns to only include year
+colnames(NCHomeSales)[4:ncol(NCHomeSales)] <- gsub("5/31/", "", colnames(NCHomeSales)[4:ncol(NCHomeSales)])
+
+# View the tibble
+# View(NCHomeSales)
+
+
+```
+
+
+```{r}
+
+# Tidy the data.
+TidyNCHomeSales2 <- NCHomeSales %>%
+  gather(key = "Year", value = "ZHVI", -RegionName, -State, -Metro) %>%
+  mutate(Year = gsub("\\.", "/", Year)) 
+
+# Group by Metro
+NCHomeSales_grouped <- TidyNCHomeSales2 %>%
+  group_by(Metro)
+
+```
+
+
+
+```{r}
+
+ggplot(NCHomeSales_grouped, aes(x = Metro, y = ZHVI)) +
+  geom_violin(width = 0.7) +  # Adjust the width of the violin plot
+  geom_boxplot(width = 0.2) +  # Adjust the width of the box plot
+  scale_y_continuous(breaks = c(0, 1000000, 2000000), labels = c("0", "1M", "2M")) +
+  labs(x = "Metro", y = "Home Values (in $)") +
+  theme(axis.text.x = element_text(angle = 0)) 
+
+
+
+```
+
+
+
+
+
+---
+
+
+#  Relocation Home Value Comparison
+
+
+
+**a. Based on your analysis, which city’s housing is most affordable? Least affordable?**   
+Most affordable city: Houston ; Least affordable city: New York
+
+**b. Which cities saw the largest change in prices over the past 5 years? Which city has remained more consistent (i.e., no huge swings up or down in home values)?**   
+City with largest change in prices over the past 5 years: Denver  ;   City that has remained consistent over the past 5 years: Chicago
+
+**c. Which cities saw a decline in value during 2023 and which cities remained consistent?**   
+Denver saw a decline in home values during 2023.New York had a very small decline. ; Chicago and Houston's home values remained consistent during 2023.
+
+
+
+```{r}
+# Filter data
+NationalHomeSales <- Sales %>%
+  filter(RegionName %in% c("Chicago", "Denver", "Houston", "New York"),
+         CountyName %in% c("Cook County", "Denver County", "Harris County", "Queens County")) %>%
+  select(RegionName, State, CountyName, Metro,
+         `5/31/2013`, `5/31/2014`, 
+         `5/31/2015`, `5/31/2016`, 
+         `5/31/2017`, `5/31/2018`, 
+         `5/31/2019`, `5/31/2020`, 
+         `5/31/2021`, `5/31/2022`, 
+         `5/31/2023`)
+
+# Rename the date columns to only include the year
+colnames(NationalHomeSales)[5:ncol(NationalHomeSales)] <- gsub("5/31/", "", colnames(NationalHomeSales)[5:ncol(NationalHomeSales)])
+
+# View the tibble
+# View(NationalHomeSales)
+
+```
+
+
+```{r}
+# Tidy the data
+NationalHomeSales_tidy <- NationalHomeSales %>%
+  pivot_longer(cols = `2013`:`2023`, names_to = "YR", values_to = "ZHVI")
+
+# View the data
+# View(NationalHomeSales_tidy)
+```
+
+
+```{r}
+library(scales)
+
+# Plotting scatterplots for each city separately using facets
+ggplot(NationalHomeSales_tidy, aes(x = YR, y = ZHVI)) +
+  geom_point() +
+  facet_wrap(~Metro) +
+  labs(x = "YR", y = "Home Values (in $)") +
+  scale_y_continuous(labels = label_comma()) +  # Add commas to y-axis labels
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  
+
+```
+
+
+
+---
+
+
+### Future Home Values
+
+**a. Which is the only city that is projected to have a decrease in home values in the next 3 months?**
+No city projected to have a decrease in home values in the next 3 months
+
+
+**b. If you are only concerned about the largest home value increase (by percentage) in the next 12 months, which city would you choose to relocate to?**
+Chicago, IL
+
+
+
+```{r}
+Projections <- read_csv("Projections.csv")
+
+# Filter the data for the specified cities and columns
+FutureHomeValues <- Projections %>%
+  filter(RegionName %in% c("Chicago, IL", "Denver, CO", "Houston, TX", "New York, NY")) %>%
+  select(RegionName, `2024-04-30`, `2024-06-30`, `2025-03-31`)
+
+# Rename the columns
+colnames(FutureHomeValues)[2:4] <- c("Current", "ThreeMonths", "TwelveMonths")
+
+# View the tibble
+# View(FutureHomeValues)
+
+
+
+```
+
+```{r}
+
+# Tidy the data
+FutureHomeValues_tidy <- FutureHomeValues %>%
+  pivot_longer(cols = -RegionName, names_to = "Time", values_to = "PercentageChange")
+
+# Plotting scatter plot with city as color
+ggplot(FutureHomeValues_tidy, aes(x = Time, y = PercentageChange, color = RegionName)) +
+  geom_point() +
+  labs(x = "Time", y = "Percentage Change") +
+  theme(axis.text.x = element_text(angle = 0))
+```
+
+
+
+
+
+
+
+
+
+
+

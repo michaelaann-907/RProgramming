@@ -1,0 +1,7 @@
+"0",""
+"0","# Box Plot"
+"0","ggplot(GOOG, aes(x = Close)) +"
+"0","  geom_boxplot() +"
+"0","  labs(title = ""Box Plot of Close Prices"","
+"0","       x = ""Close Price"","
+"0","       y = ""Frequency"")"

@@ -1,0 +1,31 @@
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(corrplot)"
+"2","corrplot 0.92 loaded
+"
+"0","library(RColorBrewer) "
+"0",""
+"0","# Create new dataset insurance 2 with age, bmi, children, and charges"
+"0","insurance2 <- insurance %>% "
+"0","               select(age, bmi, children, charges)"
+"0",""
+"0","# Calculating correlation matrix"
+"0","Corr_matrix <- cor(insurance2)"
+"0",""
+"0","# Visualizing the correlation matrix"
+"0","corrplot(Corr_matrix, type=""upper"", order=""hclust"", "
+"0","col=brewer.pal(n=8, name=""RdYlBu"")) "
+"0",""

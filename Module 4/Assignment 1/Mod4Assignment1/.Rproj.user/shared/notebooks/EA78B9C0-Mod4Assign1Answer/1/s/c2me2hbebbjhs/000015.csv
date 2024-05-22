@@ -1,0 +1,5 @@
+"0",""
+"0","# Filter AvgStateIncome to include only states with ""N"" in the abbreviation"
+"0","AvgStateIncome_N <- filter(AvgStateIncome, grepl(""N"", State_ab))"
+"0",""
+"0","AvgStateIncome_N"

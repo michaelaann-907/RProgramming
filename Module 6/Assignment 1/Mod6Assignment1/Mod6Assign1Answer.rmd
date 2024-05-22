@@ -1,0 +1,126 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+# Module 6 - Assignment 1
+## Pierce, Michaela 
+### Lubridate
+
+
+
+
+```{r}
+# Load necessary packages
+library(tidyverse)
+library(lubridate)
+
+```
+
+
+
+
+```{r}
+library(readr)
+Appointments <- read_csv("Appointments.csv")
+#View(Appointments)
+```
+
+
+
+# Working with Dates
+
+
+```{r}
+# set the ReservationYear to 2019 for all the rows
+Appointments <- Appointments %>%
+  mutate(ReservationYear = 2019)
+
+
+# Combine ReservationYear, ReservationMonth, and ReservationDay to create ReservationDate
+# Combine CreationYear, CreationMonth, and CreationDay to create CreationDate
+Appointments <- Appointments %>%
+  mutate(ReservationDate = make_date(year = ReservationYear, month = ReservationMonth, day = ReservationDay),
+         CreationDate = make_date(year = CreationYear, month = CreationMonth, day = CreationDay))
+
+
+# Calculate the difference in days between ReservationDate and CreationDate
+# Convert the difftime object to numeric
+Appointments <- Appointments %>%
+  mutate(ReservationSpan = as.numeric(difftime(ReservationDate, CreationDate, units = "days")))
+
+```
+
+
+
+
+# Exploratory Analysis
+
+
+```{r}
+# View summary of data before converting ReservationSpan to numeric
+summary(Appointments)
+
+# Convert ReservationSpan to numeric
+Appointments <- Appointments %>%
+  mutate(ReservationSpan = as.numeric(ReservationSpan))
+
+# View summary of data after converting ReservationSpan to numeric
+summary(Appointments)
+
+```
+
+
+
+```{r}
+# Calculate average time between appointment creation and reservation date
+average_reservation_span <- mean(Appointments$ReservationSpan)
+
+# Find maximum time between appointment creation and reservation date
+max_reservation_span <- max(Appointments$ReservationSpan)
+
+# Find minimum time between appointment creation and reservation date
+min_reservation_span <- min(Appointments$ReservationSpan)
+
+# Print results
+cat("a. Average time between appointment creation and reservation date:", average_reservation_span, "days\n")
+cat("b. Maximum time between appointment creation and reservation date:", max_reservation_span, "days\n")
+cat("c. Minimum time between appointment creation and reservation date:", min_reservation_span, "days\n")
+
+
+```
+
+__a. What is the average time between appointment creation and the actual reservation date?__
+Approximately 38.53 days.
+__b. What was the max time?__
+207 days.
+__c. What was the min time?__
+1 day.
+
+
+
+
+```{r}
+
+# Calculate correlation between ReservationSpan and Show
+correlation <- cor(Appointments$ReservationSpan, Appointments$Show)
+print(correlation)  # Print correlation coefficient
+
+# Create bar chart for Show variable
+ggplot(Appointments, aes(x = factor(Show))) +
+  geom_bar() +
+  labs(x = "Show", y = "Frequency", title = "Frequency of Show vs No Show")
+
+```
+
+
+
+__a. Are ReservationSpan and Show highly correlated?__  
+The correlation coefficient between `ReservationSpan` and `Show` is 0.002693853. Since this value is very close to zero, it indicates a very weak correlation between these two variables. Therefore, `ReservationSpan` and `Show` are not highly correlated.
+
+
+
+
+__b. Based on 0 being “no show” and 1 being “show”, did most people make their appointments?__  
+Yes, most people made their appointments.
+

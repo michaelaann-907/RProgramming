@@ -1,0 +1,23 @@
+"0","Projections <- read_csv(""Projections.csv"")"
+"2","[1mRows: [22m[34m895[39m [1mColumns: [22m[34m9[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (3): RegionName, RegionType, StateName
+[32mdbl[39m  (5): RegionID, SizeRank, 2024-04-30, 2024-06-30, 2025-03-31
+[34mdate[39m (1): BaseDate"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","# Filter the data for the specified cities and columns"
+"0","FutureHomeValues <- Projections %>%"
+"0","  filter(RegionName %in% c(""Chicago, IL"", ""Denver, CO"", ""Houston, TX"", ""New York, NY"")) %>%"
+"0","  select(RegionName, `2024-04-30`, `2024-06-30`, `2025-03-31`)"
+"0",""
+"0","# Rename the columns"
+"0","colnames(FutureHomeValues)[2:4] <- c(""Current"", ""ThreeMonths"", ""TwelveMonths"")"
+"0",""
+"0","# View the tibble"
+"0","# View(FutureHomeValues)"
+"0",""
+"0",""
+"0",""

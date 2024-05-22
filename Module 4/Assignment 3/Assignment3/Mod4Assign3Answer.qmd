@@ -1,0 +1,93 @@
+---
+title: "Module4Quarto"
+author: "Pierce"
+format: html
+editor: visual
+---
+
+# Module 4 - Assignment 3
+
+## Pierce, Michaela
+
+#### Analysis of Stocks
+
+```{r}
+
+library(tidyverse)
+
+
+siri <- read.csv("SIRI.csv")
+
+
+
+
+```
+
+#### Siri Stock Price Plots
+
+The following is an analysis of Siri's stock price from the past year. This will include a scatter, line, bar, histogram and boxplot. All the plots represent the closing price on the dates listed on the x-axis.
+
+```{r}
+# For all of the following plots, you 
+# will be using the variable Date for the x-axis and the variable Open for the y-axis.
+
+# a. Scatterplot 
+
+ggplot(siri, aes(x = Date, y = Open)) +
+  geom_point() +
+  labs(title = "Scatterplot of Open Prices", x = "Date", y = "Open")
+
+
+
+
+# b. Line Graph 
+
+ggplot(siri, aes(x = Date, y = Open)) +
+  geom_line() +
+  labs(title = "Line Graph of Open Prices", x = "Date", y = "Open")
+
+
+# c. Bar Graph 
+# (hint: geom_col) 
+
+ggplot(siri, aes(x = Date, y = Open)) +
+  geom_col() +
+  labs(title = "Bar Graph of Open Prices", x = "Date", y = "Open")
+
+
+
+# d. Histogram 
+# (use the variable Close for the x-axis, nothing will be needed for the y-axis) 
+
+ggplot(siri, aes(x = Close)) +
+  geom_histogram(binwidth = 1, fill = "green", color = "black") +
+  labs(title = "Histogram of Close Prices", x = "Close")
+
+
+
+
+
+# e. Box Plot 
+# (use the variable Close for the x-axis, nothing will be needed for the y-axis) 
+
+ggplot(siri, aes(x = Close)) +
+  geom_boxplot(fill = "purple", color = "black") +
+  labs(title = "Box Plot of Close Prices", x = "Close")
+
+
+
+# Line Graph with Points
+ggplot(siri, aes(x = Date, y = Open)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Line Graph of Open Prices with Points", x = "Date", y = "Open")
+
+
+
+# Question
+# Based on the analysis of the opening price over the past year, would suggest investing in the company? Does the output suggest that the stock is has been increasing or decreasing?
+
+
+```
+
+Based on the analysis, investing in the company may not be suggested. The stock has been decreasing over the past year.

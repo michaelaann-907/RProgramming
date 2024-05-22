@@ -1,0 +1,7 @@
+"0","library(ggplot2)"
+"0",""
+"0","# Scatterplot for summary1 dataset (County income data)"
+"0","ggplot(data = summary1, aes(x = County, y = mean)) +"
+"0","  geom_point() +"
+"0","  labs(y = ""Income"", title = ""Mean Income by County"") +"
+"0","  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))"

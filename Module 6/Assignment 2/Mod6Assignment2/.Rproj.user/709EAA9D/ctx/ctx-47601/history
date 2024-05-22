@@ -1,0 +1,8 @@
+# Load libraries
+library(readxl)
+library(readr)
+# Load datasets
+RespiratoryExchangeSample <- read_excel("RespiratoryExchangeSample.xlsx")
+Advertising <- read_csv("Advertising.csv")
+insurance <- read_csv("insurance.csv")
+Perceptions <- read_excel("Perceptions.xlsx")

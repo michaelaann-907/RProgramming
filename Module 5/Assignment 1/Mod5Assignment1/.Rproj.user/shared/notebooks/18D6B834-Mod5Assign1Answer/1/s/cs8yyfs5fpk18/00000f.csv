@@ -1,0 +1,2 @@
+"0","Migration2$Year <- as.numeric(Migration2$Year)"
+"0","head(Migration2)"

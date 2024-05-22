@@ -1,0 +1,1 @@
+"0","CustomerChurn2[which(CustomerChurn2$tenure %in% outliers),]"

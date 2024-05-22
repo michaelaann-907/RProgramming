@@ -1,0 +1,6 @@
+"0","# Create summary3 dataset using pipe operator"
+"0","summary3 <- NC_income %>%"
+"0","  group_by(Type) %>%"
+"0","  summarise(mean = mean(IncomeMean))"
+"0",""
+"0","summary3"

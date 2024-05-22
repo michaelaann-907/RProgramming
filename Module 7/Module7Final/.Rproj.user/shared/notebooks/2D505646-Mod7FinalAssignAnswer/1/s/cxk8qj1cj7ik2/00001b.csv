@@ -1,0 +1,18 @@
+"0","library(scales)"
+"2","
+Attaching package: ‘scales’
+
+"
+"2","The following object is masked from ‘package:readr’:
+
+    col_factor
+
+"
+"0","# Plotting scatterplots for each city separately using facets"
+"0","ggplot(NationalHomeSales_tidy, aes(x = YR, y = ZHVI)) +"
+"0","  geom_point() +"
+"0","  facet_wrap(~Metro) +"
+"0","  labs(x = ""YR"", y = ""Home Values (in $)"") +"
+"0","  scale_y_continuous(labels = label_comma()) +  # Add commas to y-axis labels"
+"0","  theme(axis.text.x = element_text(angle = 90, hjust = 1))  "
+"0",""

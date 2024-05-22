@@ -1,0 +1,174 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+# Module 3 - Assignment 1
+
+## Pierce, Michaela
+
+### Data Visualization
+
+
+In this assignment, I will be using datasets containing candy rankings and production. These datasets can be found on the Canvas course website.
+
+
+
+```{r}
+library(tidyverse) 
+candy_data <- read_csv("candy_data.csv") 
+candy_production <- read_csv("candy_production.csv")
+```
+
+
+
+
+#### Visualization with Scatterplots (geom_point)
+
+```{r}
+# Create scatterplot (geom_point)
+ggplot(candy_data, aes(x = sugarpercent, label= competitorname, y = pricepercent)) +
+  geom_point()+
+  geom_smooth(method = "lm") + # adds a fitted line 
+  
+labs(title = "Sugar by Price Scatterplot", # plot title 
+  x = "Sugar content (percentile)", # x axis label 
+  y = "Price (percentile)" # y axis label 
+) +
+
+geom_text(check_overlap = T,# automatically reduce overlap (deletes some labels) 
+  vjust = "bottom", # adjust the vertical orientation 
+  nudge_y = 0.01, # move the text up a bit so it doesn't touch the points 
+  angle = 30,# tilt the text 30 degrees 
+  size = 2 # make the text smaller (to reduce overlap more) 
+) # and then add labels to the points 
+
+```
+
+
+
+
+
+The candy with the most sugar and the lowest price is ReeseÕs stuffed with pieces with a price of 0.651 % and a sugar content of 0.988 %. The most expensive candy with the highest sugar content is 100 Grand with a price of 0.86 % and a sugar content of 0.732 %.
+
+
+Candy with the most sugar: ReeseÕs stuffed with pieces  
+Candy with the least sugar: One dime  
+Candy with the lowest price: Tootsie Roll Midgies  
+Candy with the highest price: Nik L Nip 
+
+
+
+
+I wanted to get the exact values so it would be accurate. (All Below)
+I used the following sources as a guide.
+
+Learned how to use cat to print, which converts and prints all arguments as a 
+character string. 
+https://www.geeksforgeeks.org/printing-output-of-an-r-program/
+
+Learned how to print a new line in a string. Found that this is very similar to Python
+https://www.geeksforgeeks.org/r-program-to-print-a-new-line-in-string/     
+
+
+
+```{r}
+
+# Find the index of the candy with the highest price
+max_price_index <- which.max(candy_data$pricepercent)
+
+# Find the index of the candy with the highest sugar content
+max_sugar_index <- which.max(candy_data$sugarpercent)
+
+# Find the index of the candy with the highest price among candies with the highest sugar content
+max_price_highest_sugar_index <- which.max(candy_data$pricepercent[candy_data$sugarpercent == candy_data$sugarpercent[max_sugar_index]])
+
+# Print the candy with the highest price and the most sugar
+cat("Candy with the highest price and most sugar:", candy_data$competitorname[max_price_highest_sugar_index], "\n")
+cat("Price:", candy_data$pricepercent[max_price_highest_sugar_index], "%\n")
+cat("Sugar content:", candy_data$sugarpercent[max_price_highest_sugar_index], "%\n")
+
+# Print the candy with the most sugar and lowest price
+cat("Candy with the most sugar and lowest price:", candy_data$competitorname[max_sugar_index], "\n")
+cat("Price:", candy_data$pricepercent[max_sugar_index], "%\n")
+cat("Sugar content:", candy_data$sugarpercent[max_sugar_index], "%\n")
+
+
+# Find the index of the candy with the most sugar
+most_sugar_index <- which.max(candy_data$sugarpercent)
+# Find the index of the candy with the least sugar
+least_sugar_index <- which.min(candy_data$sugarpercent)
+# Find the index of the candy with the lowest price
+lowest_price_index <- which.min(candy_data$pricepercent)
+# Find the index of the candy with the highest price
+highest_price_index <- which.max(candy_data$pricepercent)
+
+# Print the candies with the most and least sugar
+cat("Candy with the most sugar:", candy_data$competitorname[most_sugar_index], "\n")
+cat("Candy with the least sugar:", candy_data$competitorname[least_sugar_index], "\n")
+
+# Print the candies with the lowest and highest price
+cat("Candy with the lowest price:", candy_data$competitorname[lowest_price_index], "\n")
+cat("Candy with the highest price:", candy_data$competitorname[highest_price_index], "\n")
+
+
+
+```
+
+
+
+
+
+   
+#### Line Chart of Candy Production 
+
+I am using the candy production dataset that will display a specific 
+date and how production during that month is compared to 2012.   
+
+
+
+```{r}
+# Create line chart with fitted line
+ggplot(candy_production, aes(x = observation_date, y = IPG3113N)) +
+  geom_line() +
+  geom_smooth() +
+  labs(title = "Monthly Candy Production",
+       x = "Year",
+       y = "As percent of 2012 production")
+```
+
+
+
+
+#### Bar Chart of Ingredients
+
+```{r}
+
+# Create bar chart for chocolate variable
+ggplot(candy_data, aes(x = chocolate)) +
+  geom_bar() 
+
+# select out the columns that have the features of the candy (chocolate, caramel, etc.) 
+candyFeatures <- candy_data %>% select(2:10) 
+# make sure that these are booleans (logical) 
+candyFeatures[] <- lapply(candyFeatures, as.logical)
+
+
+# Create bar chart for candyFeatures dataset
+ggplot(candyFeatures, aes(x = chocolate)) +
+  geom_bar()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

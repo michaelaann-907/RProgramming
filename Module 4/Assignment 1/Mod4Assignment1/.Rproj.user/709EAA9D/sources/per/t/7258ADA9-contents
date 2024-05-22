@@ -1,0 +1,173 @@
+---
+output: word_document
+---
+# Module 4 - Assignment 1
+## Pierce, Michaela 
+### Data Transformation
+
+
+
+```{r}
+# Load required packages
+library(tidyverse)
+
+# Load the dataset
+state_income <- read_csv("state_income.csv")
+
+```
+
+
+
+#### State Incomes
+
+In this section, I will create a subset of data from the `state_income.csv` file. I will be using the following variables (columns).
+
+
+1. State_Name
+2. State_ab
+3. County
+4. City
+5. Type
+6. ALand
+7. Mean
+8. Median
+9. Stdev
+
+
+```{r}
+# Create state_income2 dataset with selected variables and rearrange column order
+# using select() command to help get remaining columns
+state_income2 <- state_income %>%
+  select(State_ab, everything()) %>%
+  select(State_Name, State_ab, County, City, Type, ALand, Mean, Median, Stdev) %>%
+  rename(State = State_Name) # Rename the State_Name column to State
+
+# using head() command to show first 10 rows of data of state_income2
+head(state_income2, 10)
+
+```
+
+
+```{r}
+# Rename columns
+# Ex.) state_income2 <- rename(state_income2, new_variable_name = old_varaibale_name) 
+
+state_income2 <- rename(state_income2,
+                         SquareArea = ALand,
+                         IncomeMean = Mean,
+                         IncomeMedian = Median,
+                         IncomeStDev = Stdev)
+
+# Display the first 10 rows of the dataset
+head(state_income2, 10)
+
+```
+
+
+```{r}
+# Create a new dataset containing only North Carolina data using filter()
+NC_income <- state_income2 %>%
+  filter(State == "North Carolina")
+
+# Display the first 10 rows of the new dataset
+head(NC_income, 10)
+
+```
+
+
+#### NC Incomes
+
+I will be using the NC_income dataset to create summaries of the incomes within North Carolina 
+including summaries by county, city and type.
+
+
+
+```{r}
+# Arrange the NC_income dataset by County in ascending order using arrange()
+NC_income <- arrange(NC_income, County)
+
+# Display the first 10 rows of the arranged dataset
+head(NC_income, 10)
+
+```
+
+
+
+```{r}
+summary1 <- group_by(NC_income, County)  
+summary1 <- summarise(summary1, mean = mean(IncomeMean)) 
+
+summary2 <- NC_income %>% 
+  group_by(City) %>% 
+  summarise(mean = mean(IncomeMean))
+
+summary1
+summary2
+
+```
+Summary1 presents the average income for each county. It organizes the NC_income dataset according to counties and computes the mean of IncomeMean for each county.
+
+Summary2 showcases the average income for each city. It organizes the NC_income dataset by city and computes the mean of IncomeMean for each city.
+```{r}
+# Create summary3 dataset using pipe operator
+summary3 <- NC_income %>%
+  group_by(Type) %>%
+  summarise(mean = mean(IncomeMean))
+
+summary3
+```
+
+
+#### Income Visualization
+
+
+```{r}
+library(ggplot2)
+
+# Scatterplot for summary1 dataset (County income data)
+ggplot(data = summary1, aes(x = County, y = mean)) +
+  geom_point() +
+  labs(y = "Income", title = "Mean Income by County") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+Based on the scatterplot, Wake County has the largest average income and Stokes County has the lowest average income. Surry County has the second lowest income.
+
+
+
+```{r}
+# Create AvgStateIncome dataset by grouping state_income2 by State_ab and summarizing using mean of IncomeMean
+AvgStateIncome <- state_income2 %>%
+  group_by(State_ab) %>%
+  summarise(AvgIncome = mean(IncomeMean))
+
+AvgStateIncome
+
+# Filter AvgStateIncome to include only states with "N" in the abbreviation
+AvgStateIncome_N <- filter(AvgStateIncome, grepl("N", State_ab))
+
+AvgStateIncome_N
+
+```
+
+
+
+```{r}
+# Scatterplot for AvgStateIncome dataset
+ggplot(data = AvgStateIncome_N, aes(x = State_ab, y = AvgIncome)) +
+  geom_point() +
+  labs(x = "State", y = "Average Income", title = "Average Income by State")
+
+```
+
+
+
+Based on the scatterplot, New Jersey (NJ) had the largest average income, while Tennessee (TN) had the smallest average income.
+
+
+
+
+
+
+
+

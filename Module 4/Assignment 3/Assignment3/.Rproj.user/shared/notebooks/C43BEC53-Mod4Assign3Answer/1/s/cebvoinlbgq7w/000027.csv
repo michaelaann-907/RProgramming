@@ -1,0 +1,7 @@
+"0",""
+"0",""
+"0","# c. Bar Graph (hint: geom_col) "
+"0",""
+"0","ggplot(siri, aes(x = Date, y = Open)) +"
+"0","  geom_col() +"
+"0","  labs(title = ""Bar Graph of Open Prices"", x = ""Date"", y = ""Open"")"

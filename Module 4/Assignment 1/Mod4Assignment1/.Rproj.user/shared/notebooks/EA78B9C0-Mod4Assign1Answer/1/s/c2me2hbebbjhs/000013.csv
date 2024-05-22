@@ -1,0 +1,6 @@
+"0","# Create AvgStateIncome dataset by grouping state_income2 by State_ab and summarizing using mean of IncomeMean"
+"0","AvgStateIncome <- state_income2 %>%"
+"0","  group_by(State_ab) %>%"
+"0","  summarise(AvgIncome = mean(IncomeMean))"
+"0",""
+"0","AvgStateIncome"

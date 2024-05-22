@@ -1,0 +1,7 @@
+"0","# Create scatterplot using diamonds dataset"
+"0","ggplot(diamonds, aes(x = color, y = price)) +"
+"0","  geom_point() +"
+"0","  labs(title = ""Scatterplot of Color vs Price in Diamonds"","
+"0","       x = ""Color"","
+"0","       y = ""Price"")"
+"0",""
